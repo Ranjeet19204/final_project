@@ -22,6 +22,7 @@ export default function AddLecture() {
     title: "",
     description: "",
     videoSrc: "",
+    fileType: "",
   });
 
   function handleInputChange(e) {
@@ -33,12 +34,18 @@ export default function AddLecture() {
   }
 
   function handleVideo(e) {
-    const video = e.target.files[0];
-    const source = window.URL.createObjectURL(video);
+    const file = e.target.files[0];
+
+    if (!file) return;
+
+    const fileType = file.type;
+    const preview = window.URL.createObjectURL(file);
+
     setUserInput({
       ...userInput,
-      lecture: video,
-      videoSrc: source,
+      lecture: file,
+      videoSrc: preview,
+      fileType: fileType,
     });
   }
 
@@ -100,7 +107,7 @@ export default function AddLecture() {
             <div className="md:w-[48%] w-full flex flex-col gap-5">
               {/* lecture video */}
               <div className="border border-gray-300 h-[200px] flex justify-center cursor-pointer">
-                {userInput.videoSrc && (
+                {userInput.videoSrc && userInput.fileType.includes("video") && (
                   <video
                     muted
                     src={userInput.videoSrc}
@@ -114,12 +121,29 @@ export default function AddLecture() {
                     }}
                   ></video>
                 )}
-                {!userInput.videoSrc && (
+                {userInput.videoSrc && userInput.fileType === "application/pdf" && (
+                  <div
+                    className="w-full h-full flex items-center justify-center text-gray-500"
+                    onClick={(e) => {
+                    e.preventDefault();
+                    videoRef.current.click();
+                    }}
+                  >
+                    <iframe
+                      src={userInput.videoSrc} // The PDF file URL
+                      width="100%"
+                      height="200px"
+                      frameBorder="0"
+                    ></iframe>
+                    
+                  </div>
+                )}
+                {!userInput.videoSrc &&  (
                   <label
                     className="font-[500] text-xl h-full w-full flex justify-center items-center cursor-pointer font-lato"
                     htmlFor="lecture"
                   >
-                    Choose Your Video
+                    Choose a file
                   </label>
                 )}
                 <input
@@ -129,7 +153,7 @@ export default function AddLecture() {
                   ref={videoRef}
                   name="lecture"
                   onChange={handleVideo}
-                  accept="video/mp4, video/x-mp4, video/*"
+                  accept="video/mp4, video/x-mp4, video/*, application/pdf"
                 />
               </div>
             </div>

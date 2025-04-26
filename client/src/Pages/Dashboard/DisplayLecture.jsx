@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
+import { AiOutlineArrowLeft } from "react-icons/ai";
 import {
   getCourseLectures,
   deleteCourseLecture,
@@ -37,6 +38,12 @@ export default function DisplayLecture() {
               {state?.title}
             </span>
           </h1>
+          <button
+                className="absolute right-2 text-xl text-grey-500 z-50 pr-4"
+                onClick={() => navigate(-1)}
+                >
+                <AiOutlineArrowLeft style={{ transform: 'scaleX(1.2)' }} className="mr-2"/>
+          </button>
           <div className="flex md:flex-row flex-col md:justify-between w-full h-full">
             {/* left section for lecture video and details */}
             <div className="md:w-[48%] w-full md:p-3 p-1 overflow-y-scroll md:h-full h-[40%] flex justify-center">

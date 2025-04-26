@@ -37,6 +37,11 @@ const courseSchema = new Schema({
                 },
                 secure_url: {
                     type: String
+                },
+                fileType: {
+                    type: String,
+                    enum: ['video', 'raw'], // video for videos, raw for pdf
+                    required: true
                 }
             }
         }
